@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여행 포스팅 작성 - Travel Blog Editor</title>
+
+    <!-- MapLibre GL CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css">
+
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+
+    <!-- Editor CSS -->
+    <link rel="stylesheet" href="./css/editor.css">
+</head>
+
+<body>
+    <!-- 헤더 -->
+    <header class="editor-header">
+        <div class="header-left">
+            <a href="./index.html" class="logo">
+                <span class="logo-icon">🌏</span>
+                <span>나의 여행 기록</span>
+            </a>
+        </div>
+        <div class="header-right">
+            <button type="button" class="btn-preview" onclick="previewPost()">미리보기</button>
+            <button type="button" class="btn-save" onclick="savePost()">저장하기</button>
+        </div>
+    </header>
+
+    <!-- 메인 에디터 -->
+    <div class="editor-container">
+        <!-- 통합 에디터 -->
+        <div class="unified-editor">
+            <!-- 기본 정보 입력 -->
+            <section class="meta-section">
+                <div class="form-group">
+                    <input type="text" id="postTitle" class="input-title" placeholder="제목을 입력하세요">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group-dates">
+                        <label>📅</label>
+                        <div class="date-inputs">
+                            <input type="date" id="startDate" class="input-date" onchange="updateDateDisplay()">
+                            <span class="date-separator">~</span>
+                            <input type="date" id="endDate" class="input-date" onchange="updateDateDisplay()">
+                        </div>
+                    </div>
+                    <div class="form-group-inline">
+                        <label>🏷️</label>
+                        <input type="text" id="postTags" class="input-tags-inline" placeholder="태그 (쉼표로 구분)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="file-upload-area" id="thumbnailUploadArea">
+                        <input type="file" id="thumbnailFile" accept="image/*" style="display: none;" onchange="handleThumbnailUpload(event)">
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <div class="upload-icon">📷</div>
+                            <p class="upload-text">썸네일 이미지를 드래그하거나 클릭하여 업로드</p>
+                            <small class="upload-hint">JPG, PNG, WEBP 지원</small>
+                        </div>
+                        <div class="upload-preview" id="uploadPreview" style="display: none;">
+                            <img id="thumbnailPreviewImg" alt="Thumbnail preview">
+                            <button type="button" class="btn-remove-thumbnail" onclick="removeThumbnail()">×</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 일자별 에디터 섹션 -->
+            <section class="days-editor-section">
+                <div class="days-editor-header">
+                    <h3 class="days-editor-title">여행 기록</h3>
+                    <button type="button" class="btn-add-day" onclick="addDay()">+ 일차 추가</button>
+                </div>
+
+                <div id="daysContainer">
+                    <!-- 일차별 장소 카드가 동적으로 추가됩니다 -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- 장소 추가 모달 -->
+    <div class="modal" id="locationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>장소 추가</h3>
+                <button type="button" class="btn-close" onclick="closeLocationModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>장소 검색</label>
+                    <div class="search-input-wrapper">
+                        <input type="text" id="locationSearch" class="input-text" placeholder="예: Lake Toya, 성산일출봉, Tokyo Tower" onkeypress="if(event.key==='Enter'){searchLocation();event.preventDefault();}">
+                        <button type="button" class="btn-search" onclick="searchLocation()">검색</button>
+                    </div>
+                    <small class="help-text">💡 영어나 일본어로 검색하면 더 정확해요 (예: "Lake Toya", "洞爺湖")</small>
+                    <div id="searchResults" class="search-results">
+                        <!-- 검색 결과가 표시됩니다 -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>선택된 장소</label>
+                    <input type="text" id="locationName" class="input-text" placeholder="검색 결과에서 선택하세요" readonly>
+                    <input type="hidden" id="locationLng">
+                    <input type="hidden" id="locationLat">
+                </div>
+                <div class="form-group">
+                    <label>설명 (선택사항)</label>
+                    <input type="text" id="locationDesc" class="input-text" placeholder="예: 도쿄의 랜드마크">
+                </div>
+                <div class="form-group">
+                    <div id="locationPickerMap" class="location-picker-map"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeLocationModal()">취소</button>
+                <button type="button" class="btn-confirm" onclick="confirmLocation()">추가</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 미리보기 모달 -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content modal-preview">
+            <div class="modal-header">
+                <h3>미리보기</h3>
+                <button type="button" class="btn-close" onclick="closePreviewModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="previewContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MapLibre GL JS -->
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+    <!-- Editor JS -->
+    <script src="./js/editor.js"></script>
+</body>
+
+</html>

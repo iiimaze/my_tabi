@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여행 포스트 - Travel Blog</title>
+
+    <!-- MapLibre GL CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/post-detail.css">
+</head>
+
+<body>
+    <!-- 헤더 -->
+    <header class="post-header">
+        <div class="header-container">
+            <a href="./index.html" class="logo">
+                <span class="logo-icon">🌏</span>
+                <span>나의 여행 기록</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 포스트 내용 -->
+    <main class="post-main">
+        <article class="post-article" id="postArticle">
+            <!-- 포스트 내용이 동적으로 추가됩니다 -->
+        </article>
+
+        <!-- 우측 하단 고정 지도 -->
+        <div class="sticky-map-container">
+            <div id="stickyMap" class="sticky-map"></div>
+        </div>
+    </main>
+
+    <!-- MapLibre GL JS -->
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+
+    <!-- Data JS -->
+    <script src="./data/posts/sapporo-summer.js"></script>
+    <script src="./data/posts/index.js"></script>
+
+    <!-- Post Detail JS -->
+    <script src="./js/post-detail.js"></script>
+</body>
+
+</html>

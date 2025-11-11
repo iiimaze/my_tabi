@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌏 나의 여행 기록 - Travel Blog</title>
+
+    <!-- MapLibre GL CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <!-- 헤더 -->
+    <header>
+        <div class="logo" onclick="scrollToTop()">
+            <span class="logo-icon">🌏</span>
+            <span>나의 여행 기록</span>
+        </div>
+    </header>
+
+    <!-- 게시글 목록 섹션 -->
+    <div class="posts-section">
+        <h2 class="section-title">여행 기록</h2>
+        <div class="posts-scroll" id="postsScroll">
+            <!-- 게시글 카드들이 동적으로 추가됩니다 -->
+        </div>
+    </div>
+
+    <!-- 지도 섹션 -->
+    <div class="map-section">
+        <div class="map-container-wrapper">
+            <h2 class="map-title">전체 여행지</h2>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- 지역별 카테고리 섹션 -->
+    <div id="categorySection"></div>
+
+    <!-- 게시글 상세 모달 -->
+    <div class="post-detail-modal" id="postModal">
+        <div class="post-detail-content" id="postContent">
+            <!-- 게시글 내용이 동적으로 추가됩니다 -->
+        </div>
+    </div>
+
+    <!-- MapLibre GL JS -->
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+
+    <!-- Data JS (먼저 로드) -->
+    <script src="./data/posts/sapporo-summer.js"></script>
+    <script src="./data/posts/index.js"></script>
+
+    <!-- Custom JS -->
+    <script src="./js/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,583 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    background: #f5f7fa;
+}
+
+/* 헤더 */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+    padding: 16px 40px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.logo:hover {
+    opacity: 0.7;
+}
+
+.logo-icon {
+    font-size: 32px;
+}
+
+/* 게시글 목록 섹션 */
+.posts-section {
+    margin-top: 70px;
+    padding: 40px 40px 30px;
+    background: white;
+    border-bottom: 1px solid #e1e8ed;
+    transition: min-height 0.3s ease-out;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title::before {
+    content: '📍';
+    font-size: 24px;
+}
+
+.posts-scroll {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding-bottom: 24px;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e0 #f7fafc;
+    position: relative;
+    min-height: 320px;
+    transition: min-height 0.3s ease-out;
+}
+
+.posts-scroll.has-expanded {
+    min-height: 600px;
+}
+
+.posts-scroll::-webkit-scrollbar {
+    height: 10px;
+}
+
+.posts-scroll::-webkit-scrollbar-track {
+    background: #f7fafc;
+    border-radius: 10px;
+}
+
+.posts-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.posts-scroll::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+.post-card {
+    min-width: 280px;
+    max-width: 280px;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #f0f0f0;
+    position: relative;
+}
+
+.post-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    border-color: #3498db;
+}
+
+/* 확장된 카드 */
+.post-card.expanded {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    z-index: 10;
+    transform: translateY(0);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-color: #3498db;
+    animation: expandCard 0.3s ease-out;
+}
+
+@keyframes expandCard {
+    from {
+        opacity: 0.8;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.post-card-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.post-card:hover .post-card-image {
+    transform: scale(1.05);
+}
+
+.post-card.expanded .post-card-image {
+    height: 250px;
+}
+
+/* 닫기 버튼 */
+.post-card-close {
+    display: none;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 20;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s;
+    font-size: 20px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-card-close:hover {
+    background: #f8f9fa;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.post-card-close:active {
+    transform: scale(0.95);
+}
+
+.post-card .post-card-close {
+    display: none;
+}
+
+.post-card.expanded .post-card-close {
+    display: flex;
+}
+
+.post-card-content {
+    padding: 20px;
+}
+
+.post-card.expanded .post-card-content {
+    padding: 24px;
+}
+
+.post-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+    line-height: 1.4;
+}
+
+.post-card.expanded .post-card-title {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.post-card-date {
+    font-size: 13px;
+    color: #718096;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.post-card-date::before {
+    content: '📅';
+    font-size: 14px;
+}
+
+/* 미리보기 내용 */
+.post-card-preview {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.post-card.expanded .post-card-preview {
+    display: block;
+}
+
+.post-card-preview-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 16px;
+}
+
+.post-card-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.post-card-tag {
+    padding: 4px 12px;
+    background: #e3f2fd;
+    color: #1976d2;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.btn-more {
+    width: 100%;
+    padding: 12px;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-more:hover {
+    background: #357abd;
+}
+
+/* 지도 섹션 */
+.map-section {
+    min-height: 700px;
+    position: relative;
+    background: #f5f7fa;
+    padding: 40px;
+}
+
+.map-container-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.map-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.map-title::before {
+    content: '🗺️';
+    font-size: 24px;
+}
+
+#map {
+    width: 100%;
+    height: 600px;
+    min-height: 600px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* 게시글 상세 모달 */
+.post-detail-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.post-detail-content {
+    max-width: 900px;
+    margin: 100px auto 60px;
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close-button {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #666;
+    background: #f5f7fa;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.close-button:hover {
+    background: #e1e8ed;
+    color: #333;
+    transform: rotate(90deg);
+}
+
+.post-title {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+    line-height: 1.3;
+}
+
+.post-date {
+    color: #718096;
+    margin-bottom: 40px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.post-date::before {
+    content: '📅';
+    font-size: 18px;
+}
+
+.day-section {
+    margin-bottom: 50px;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 16px;
+    border-left: 4px solid #3498db;
+}
+
+.day-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.day-content {
+    line-height: 1.9;
+    margin-bottom: 20px;
+    color: #4a5568;
+    font-size: 16px;
+}
+
+.location-list {
+    margin: 20px 0;
+    padding-left: 24px;
+    color: #4a5568;
+}
+
+.location-list li {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.embedded-map {
+    width: 100%;
+    height: 350px;
+    border-radius: 12px;
+    margin: 24px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 마커 팝업 스타일 */
+.maplibregl-popup-content {
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.popup-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+    font-size: 16px;
+}
+
+.popup-description {
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.5;
+}
+
+.popup-post {
+    font-size: 12px;
+    color: #3498db;
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+/* 카테고리 섹션 */
+.category-section {
+    padding: 50px 40px;
+    background: white;
+    border-top: 1px solid #e1e8ed;
+}
+
+.category-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-title::before {
+    content: '🏷️';
+    font-size: 24px;
+}
+
+.category-posts-wrapper {
+    margin-bottom: 40px;
+}
+
+.category-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #3498db;
+    display: inline-block;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    header {
+        padding: 12px 20px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .posts-section {
+        padding: 30px 20px;
+    }
+
+    .section-title {
+        font-size: 20px;
+    }
+
+    .post-card {
+        min-width: 240px;
+        max-width: 240px;
+    }
+
+    .map-container-wrapper {
+        padding: 20px;
+    }
+
+    .category-section {
+        padding: 30px 20px;
+    }
+
+    .category-title {
+        font-size: 20px;
+    }
+
+    .category-name {
+        font-size: 18px;
+    }
+
+    .post-detail-content {
+        margin: 80px 20px 40px;
+        padding: 30px 20px;
+    }
+
+    .post-title {
+        font-size: 28px;
+    }
+
+    .day-section {
+        padding: 20px;
+    }
+
+    .day-title {
+        font-size: 22px;
+    }
+}
